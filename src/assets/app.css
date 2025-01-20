@@ -1,0 +1,323 @@
+/* Arka plan resmini tanımlama */
+.auth-page {
+  background-image: url('/images/market.jpeg');
+  background-size: cover;  /* Resmi tam sayfa yapar */
+  background-position: center;  /* Resmi ortalar */
+  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Formun bulunduğu alan */
+.auth-container {
+  max-width: 480px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9); /* Hafif şeffaf beyaz arka plan */
+  border-radius: 12px;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1); /* Güçlü bir gölge efekti */
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Başlık stilini modernleştirelim */
+.auth-container h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #007bff; /* Başlık altı çizgi */
+  padding-bottom: 5px;
+}
+
+/* Form alanları */
+.form-group {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+/* Input focus rengi */
+.form-group input:focus {
+  border-color: #007bff;
+  background-color: #fff;
+  outline: none;
+}
+
+/* Butonların stilleri */
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 15px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Kayıt Ol butonu stilini farklı yapalım */
+.register-btn {
+  background-color: #28a745;
+  color: white;
+  font-size: 18px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #218838;
+}
+
+/* Alt bağlantılar (Giriş Yap/Kayıt Ol) */
+p {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+p span {
+  color: #007bff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+p span:hover {
+  text-decoration: underline;
+}
+
+/* Navbar için genel stil */
+.navbar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: white !important; /* Navbar'ın arka planı */
+  height: 70px; /* Navbar yüksekliği */
+  display: flex;
+  align-items: center; /* Logoyu ve diğer elemanları ortalar */
+  padding: 0 20px; /* Yatay boşluk */
+  justify-content: space-between; /* Logo ve sağdaki elemanları arasındaki boşluğu kontrol eder */
+}
+
+/* Navbar ile içerik arasına boşluk bırakmak için */
+body {
+  padding-top: 70px;
+}
+
+/* Navbar'daki ikonların hizalanmasını sağlar */
+.navbar-icons {
+  margin-right: 5px;  /* İkon ile metin arasına boşluk ekler */
+}
+
+/* Navbar'daki arama formunun ortalanmasını sağlar */
+.navbar form {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px; /* Navbar ile form arasına boşluk bırakır */
+}
+
+/* Navbar'daki linklerin dikey hizalanmasını sağlar */
+.navbar-nav .nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: black;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ddd; /* Hover efekt */
+}
+
+/* Navbar'ın içindeki arama butonunun genişliğini ayarlar */
+.navbar form input[type="search"] {
+  width: 85%;  /* Arama kutusunun genişliği */
+  padding: 6px 10px;  /* İç boşluk */
+  font-size: 14px;  /* Yazı tipi boyutu */
+  border-radius: 5px;  /* Kenar yuvarlatma */
+  border: 1px solid #ccc;  /* Kenar rengi */
+  height: 40px;
+}
+
+.navbar form button {
+  width: 5%;  /* Butonun genişliği */
+  padding: px 10px;  /* İç boşluk */
+  font-size: 14px;  /* Buton yazı boyutu */
+  border-radius: 5px;  /* Yuvarlatılmış kenar */
+  border: 1px solid #ccc;  /* Buton kenar rengi */
+  background-color: #007bff;  /* Buton arka plan rengi */
+  color: white;  /* Buton yazı rengi */
+  cursor: pointer;  /* Tıklanabilir gösterir */
+  margin-left: 8px;  /* Arama kutusu ile buton arasına boşluk ekler */
+  height: 40px;  /* Butonun yüksekliği arama kutusuyla eşit */
+}
+.navbar form button:hover {
+  background-color: #0056b3;  /* Hover efekti */
+}
+
+/* Logo'nın boyutunu sabitlemek */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  object-fit: cover;  /* Logo kesilerek kutuya sığdırılır */
+  
+}
+
+.logo {
+  width: 150px; /* Logo boyutu 250px */
+  height: 32px; /* Oranı korur */
+  object-fit: cover; /* Görüntünün taşmasını engeller */
+  cursor: pointer; /* Tıklanabilir gösterir */
+  transition: transform 0.3s ease; /* Hover animasyonu */
+  margin-top: 0px; /* Hafif yukarı veya aşağı kaydır */
+  border-radius: 15px; /* Köşeleri yuvarlatır, değeri artırarak daha yuvarlak yapabilirsiniz */
+}
+
+.logo:hover {
+  transform: scale(1.1); /* Hover'da büyütme efekti */
+}
+
+.social-media-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	background-color: #f9f9f9;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.social-media-container a {
+	margin: 0 10px;
+	transition: transform 0.3s ease;
+}
+
+.social-media-container a:hover {
+	transform: scale(1.2); /* Hover'da büyütme efekti */
+}
+
+.social-media-container img {
+	width: 30px;
+	height: 30px;
+}
+
+
+/* src/assets/profile.css */
+.profile-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-section {
+  margin-bottom: 15px;
+}
+
+.profile-section label {
+  font-weight: bold;
+  display: block;
+}
+
+.profile-section input, .profile-section textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.edit-button {
+  background-color: #007BFF;
+  color: white;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.orders-link {
+  text-decoration: none;
+}
+
+.modern-order-button {
+  display: flex;
+  align-items: center;
+  background-color: #28a745;  /* Yeşil renk */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;  /* Yuvarlak kenarlar */
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modern-order-button:hover {
+  background-color: #218838;  /* Hover efekti */
+  transform: scale(1.05);  /* Küçük büyüme efekti */
+}
+
+.modern-order-button svg {
+  margin-right: 8px;  /* İkon ile yazı arasına boşluk */
+}
+
+.logout-button {
+  background-color: #FF5733;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
