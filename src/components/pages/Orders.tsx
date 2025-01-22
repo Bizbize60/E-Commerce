@@ -4,47 +4,54 @@ import { FaBoxOpen, FaCalendarAlt, FaDollarSign } from 'react-icons/fa';
 import { useUser } from '../../context/UserContext';
 import '../../assets/order.css'; // Sipariş geçmişi stil dosyasını import et
 
+// Define the structure of an order
+interface OrderItem {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+interface Order {
+  id: string;
+  date: string;
+  total: number;
+  status: string;
+  items: OrderItem[];
+}
+
 const Orders = () => {
   const { user } = useUser();
   const navigate = useNavigate();
   
-  // Sipariş verisi simülasyonu
-  const [orders, setOrders] = useState([
-    {
-      id: '123',
-      date: '2024-12-15',
-      total: 125.99,
-      status: 'Delivered',
-      items: [
-        { name: 'Laptop', quantity: 1, price: 100 },
-        { name: 'Mouse', quantity: 2, price: 25 },
-      ],
-    },
-    {
-      id: '124',
-      date: '2024-12-10',
-      total: 49.99,
-      status: 'Pending',
-      items: [
-        { name: 'T-Shirt', quantity: 2, price: 24.99 },
-      ],
-    },
-    {
-      id: '125',
-      date: '2024-12-05',
-      total: 70.00,
-      status: 'Delivered',
-      items: [
-        { name: 'Shoes', quantity: 1, price: 70 },
-      ],
-    },
-  ]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
       navigate('/log-in');  // Kullanıcı giriş yapmamışsa, giriş sayfasına yönlendir
+    } else {
+      fetchOrders();
     }
   }, [user, navigate]);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch('/api/orders'); // API endpoint for fetching orders
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setOrders(data);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="orders-container">

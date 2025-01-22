@@ -25,32 +25,37 @@ const CartItem: React.FC<{ item: CartItemDto }> = ({ item }) => {
 
 	const updateProductQuantity = () => {
 		if (quantity == item.quantity) return;
+		console.log('Updating quantity for productId:', item.productId, 'New Quantity:', quantity);
+	
 		axios
 			.post(Endpoints.Carts.UpdateCartItemQuantity, {
 				productId: item.productId,
 				quantity: quantity,
 			})
 			.then((result) => {
-				console.log(result);
+				console.log('Quantity Update Success:', result.data);
+				dispatch(loadCarts());
 			})
 			.catch((reason) => {
-				console.log(reason);
+				console.error('Quantity Update Error:', reason);
 			});
 	};
-
+	
 	const removeFromCart = (productId: number) => {
+		console.log('Removing product from cart:', productId);
+	
 		axios
 			.delete(`${Endpoints.Carts.RemoveProduct}/${productId}`)
 			.then((result) => {
-				console.log('result :>> ', result);
+				console.log('Product Removed Successfully:', result.data);
 				dispatch(loadCarts());
 				toast.success('Ürün silindi.');
 			})
 			.catch((reason) => {
-				console.log(reason);
+				console.error('Error Removing Product:', reason);
 			});
 	};
-
+	
 	return (
 		<tr>
 			<td>{item.product.name}</td>

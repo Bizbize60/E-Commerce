@@ -1,35 +1,20 @@
+# main.py
 from sanic import Sanic
 from sanic.response import json
 from sanic_ext import Extend
+from sanic_cors import CORS
 import jwt
 import datetime
 from functools import wraps
 import uuid
 
 app = Sanic("CategoryAPI")
+CORS(app, resources={r"/*": {"origins": "*"}})
 Extend(app)
 
-# Token doğrulama fonksiyonu
-def login_required(f):
-    @wraps(f)
-    async def decorated_function(request, *args, **kwargs):
-        auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.startswith("Bearer "):
-            return json({"isSuccess": False, "message": "Lütfen giriş yapın."}, status=401)
-
-        token = auth_header.split(" ")[1]
-        try:
-            decoded = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-            request.ctx.user = decoded  # Kullanıcı bilgisini talebe ekle
-        except jwt.ExpiredSignatureError:
-            return json({"isSuccess": False, "message": "Token süresi dolmuş."}, status=401)
-        except jwt.InvalidTokenError:
-            return json({"isSuccess": False, "message": "Geçersiz token."}, status=401)
-
-        return await f(request, *args, **kwargs)
-    return decorated_function
 SECRET_KEY = "your_secret_key"
-# Örnek kullanıcı veritabanı
+
+# Mock Database
 users_db = []
 categories = [
     {"id": 1, "name": "Meyve/Sebze"},
@@ -46,7 +31,6 @@ products = [
     {"id": 5, "name": "Tam Yağlı Süt", "price": 40, "categoryId": 4, "imageUrl": "https://www.icim.com.tr/wp-content/uploads/2024/02/icim-15-yagli-uht-sut_vs3.png"},
 ]
 
-# Sepetler
 cart_db = {}
 
 # Middleware: CORS Ekleme
@@ -68,7 +52,7 @@ async def register_user(request):
     if any(user["email"] == email for user in users_db):
         return json({"isSuccess": False, "message": "Bu e-posta zaten kayıtlı."}, status=400)
 
-    customer_id = str(uuid.uuid4())  # Benzersiz bir ID oluşturuluyor
+    customer_id = str(uuid.uuid4())
 
     token = jwt.encode(
         {"email": email, "customerId": customer_id, "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
@@ -78,7 +62,6 @@ async def register_user(request):
 
     users_db.append({"email": email, "password": password, "customer_id": customer_id})
     return json({"isSuccess": True, "message": "Kayıt başarılı!", "token": token})
-
 
 @app.post("/api/Users/Login")
 async def login_user(request):
@@ -98,15 +81,13 @@ async def login_user(request):
 
     return json({"isSuccess": True, "token": token, "customerId": user["customer_id"]})
 
-
-    
 # Kategoriler Endpointleri
 @app.get("/api/Categories")
 async def get_categories(request):
     return json({"isSuccess": True, "value": categories})
 
 # Ürünler Endpointleri
-@app.get("/api/Products")
+@app.get("/api/products")
 async def get_products(request):
     category_id = request.args.get("categoryId")
 
@@ -117,6 +98,7 @@ async def get_products(request):
 
     return json({"isSuccess": True, "value": products})
 
+# Sepet İşlemleri
 @app.post("/api/Carts/AddProduct")
 async def add_to_cart(request):
     customer_id = request.json.get("customerId")
@@ -135,12 +117,7 @@ async def add_to_cart(request):
             return json({"isSuccess": True, "message": "Ürün güncellendi", "cartItems": cart_db[customer_id]})
 
     cart_db[customer_id].append({"productId": product_id, "quantity": quantity})
-    print("Güncel Sepet:", cart_db)
     return json({"isSuccess": True, "message": "Ürün sepete eklendi", "cartItems": cart_db[customer_id]})
-
-
-
-
 
 @app.get("/api/Carts/GetCartOfCustomer")
 async def get_cart_of_customer(request):
@@ -152,7 +129,6 @@ async def get_cart_of_customer(request):
     if customer_id not in cart_db:
         cart_db[customer_id] = []
 
-    # Ürün bilgilerini ekleyerek sepeti zenginleştir
     enriched_cart = [
         {
             "productId": item["productId"],
@@ -163,6 +139,32 @@ async def get_cart_of_customer(request):
     ]
 
     return json({"isSuccess": True, "cartItems": enriched_cart})
+
+@app.delete("/api/Carts/RemoveProduct")
+async def remove_from_cart(request):
+    customer_id = request.json.get("customerId")
+    product_id = request.json.get("productId")
+
+    if not customer_id or not product_id:
+        return json({"isSuccess": False, "message": "Eksik parametreler"}, status=400)
+
+    if customer_id in cart_db:
+        cart_db[customer_id] = [
+            item for item in cart_db[customer_id] if item["productId"] != product_id
+        ]
+        return json({"isSuccess": True, "message": "Ürün sepetten kaldırıldı", "cartItems": cart_db[customer_id]})
+
+    return json({"isSuccess": False, "message": "Müşteri bulunamadı"}, status=404)
+
+# Diğer route'ların altında bir yere ekleyin
+@app.options("/api/<path:path>")
+async def preflight_handler(request, path):
+    return json({}, headers={
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Authorization, Content-Type"
+    })
+
 
 
 if __name__ == "__main__":

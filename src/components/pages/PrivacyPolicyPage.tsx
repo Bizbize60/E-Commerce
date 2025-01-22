@@ -16,7 +16,7 @@ const PrivacyPolicyPage = () => {
 			<Page.Main fullPage>
 				<h1 className='mb-4'>Gizlilik Politikası</h1>
 				<p>
-					Bu gizlilik politikası, [Şirket Adı] tarafından sunulan hizmetlerin kullanımı sırasında toplanan, kullanılan
+					Bu gizlilik politikası, AraGelsin tarafından sunulan hizmetlerin kullanımı sırasında toplanan, kullanılan
 					ve korunan kişisel bilgileri kapsar.
 				</p>
 				<h2>Toplanan Bilgiler</h2>

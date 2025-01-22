@@ -118,87 +118,6 @@ p span:hover {
   text-decoration: underline;
 }
 
-/* Navbar için genel stil */
-.navbar {
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background-color: white !important; /* Navbar'ın arka planı */
-  height: 70px; /* Navbar yüksekliği */
-  display: flex;
-  align-items: center; /* Logoyu ve diğer elemanları ortalar */
-  padding: 0 20px; /* Yatay boşluk */
-  justify-content: space-between; /* Logo ve sağdaki elemanları arasındaki boşluğu kontrol eder */
-}
-
-/* Navbar ile içerik arasına boşluk bırakmak için */
-body {
-  padding-top: 70px;
-}
-
-/* Navbar'daki ikonların hizalanmasını sağlar */
-.navbar-icons {
-  margin-right: 5px;  /* İkon ile metin arasına boşluk ekler */
-}
-
-/* Navbar'daki arama formunun ortalanmasını sağlar */
-.navbar form {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-top: 10px; /* Navbar ile form arasına boşluk bırakır */
-}
-
-/* Navbar'daki linklerin dikey hizalanmasını sağlar */
-.navbar-nav .nav-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: black;
-}
-
-.navbar-nav .nav-link:hover {
-  color: #ddd; /* Hover efekt */
-}
-
-/* Navbar'ın içindeki arama butonunun genişliğini ayarlar */
-.navbar form input[type="search"] {
-  width: 85%;  /* Arama kutusunun genişliği */
-  padding: 6px 10px;  /* İç boşluk */
-  font-size: 14px;  /* Yazı tipi boyutu */
-  border-radius: 5px;  /* Kenar yuvarlatma */
-  border: 1px solid #ccc;  /* Kenar rengi */
-  height: 40px;
-}
-
-.navbar form button {
-  width: 5%;  /* Butonun genişliği */
-  padding: px 10px;  /* İç boşluk */
-  font-size: 14px;  /* Buton yazı boyutu */
-  border-radius: 5px;  /* Yuvarlatılmış kenar */
-  border: 1px solid #ccc;  /* Buton kenar rengi */
-  background-color: #007bff;  /* Buton arka plan rengi */
-  color: white;  /* Buton yazı rengi */
-  cursor: pointer;  /* Tıklanabilir gösterir */
-  margin-left: 8px;  /* Arama kutusu ile buton arasına boşluk ekler */
-  height: 40px;  /* Butonun yüksekliği arama kutusuyla eşit */
-}
-.navbar form button:hover {
-  background-color: #0056b3;  /* Hover efekti */
-}
-
-/* Logo'nın boyutunu sabitlemek */
-.navbar-logo {
-  display: flex;
-  align-items: center;
-  object-fit: cover;  /* Logo kesilerek kutuya sığdırılır */
-  
-}
 
 .logo {
   width: 150px; /* Logo boyutu 250px */
@@ -321,3 +240,129 @@ body {
   cursor: pointer;
 }
 
+.search-bar {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.search-input {
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
+}
+
+.category-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.category-card.active {
+  border-color: #007bff;
+  background-color: #f0f8ff;
+}
+
+.category-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+.category-name {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+
+.card {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.card-img-top {
+  height: 150px;
+  object-fit: cover;
+}
+
+.contact-us-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+input, textarea {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.submit-button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}

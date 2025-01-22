@@ -1,97 +1,66 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import { useUser } from '../../context/UserContext'; // UserContext'i import ettik
-import { useDispatch } from 'react-redux'; // Redux Dispatch
-import { setCustomerId } from '../../infrastructure/store/slices/customer-slice'; // Redux Slice
-import { toast } from 'react-toastify';
-import '../../assets/app.css';
+import { useUser } from '../../context/UserContext';
 
 const Navbar = () => {
-  const { user, isAuthenticated, setUser } = useUser(); // UserContext'ten kullanıcı bilgilerini alıyoruz
-  const dispatch = useDispatch(); // Redux için
-  const navigate = useNavigate(); // Yönlendirme için
-
-  const handleLogout = () => {
-    // Çıkış işlemleri
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
-    localStorage.removeItem('customerId');
-    setUser(null); // UserContext sıfırlanıyor
-    dispatch(setCustomerId(null)); // Redux Store sıfırlanıyor
-    toast.success('Logged out successfully!');
-    navigate('/'); // Ana sayfaya yönlendir
-  };
+  const { isAuthenticated } = useUser(); // Kullanıcı kimlik doğrulama durumu
 
   return (
-    <nav className='navbar navbar-expand-lg bg-body-tertiary'>
-      <div className='container-fluid'>
+    <header className="bg-danger text-white py-3 shadow-sm">
+      <div className="container d-flex justify-content-between align-items-center">
         {/* Logo */}
-        <NavLink to="/" className="navbar-logo">
-          <img src="/images/logo3.jpg" alt="Site Logo" className="logo" />
+        <NavLink to="/" className="navbar-logo text-white text-decoration-none d-flex align-items-center">
+          <img
+            src="/images/logo3.jpg" // Logo dosyanızın yolu
+            alt="AraGelsin Logo"
+            className="logo me-2"
+            style={{ height: '40px', borderRadius: '50%' }}
+          />
+          <span className="fs-4 fw-bold"></span>
         </NavLink>
-        <button
-          className='navbar-toggler'
-          type='button'
-          data-bs-toggle='collapse'
-          data-bs-target='#navbarScroll'
-          aria-controls='navbarScroll'
-          aria-expanded='false'
-          aria-label='Toggle navigation'>
-          <span className='navbar-toggler-icon'></span>
-        </button>
-        <div className='collapse navbar-collapse' id='navbarScroll'>
-          <ul className='navbar-nav my-lg-0 navbar-nav-scroll'>
-            <li className='nav-item'>
-              <NavLink to='/about' className={'nav-link'}>
-                About Us
-              </NavLink>
-            </li>
-          </ul>
 
-          {/* Sağ Taraf */}
-          <ul className='navbar-nav ms-auto'>
-            <li className='nav-item'>
-              <NavLink to='/cart' className={'nav-link'}>
-                <div className='nav-icon-container'>
-                  <FaShoppingCart className='navbar-icons' size={30} />
-                  <span>Cart</span>
-                </div>
+        {/* Navigation Links */}
+        <nav className="d-flex gap-4">
+          <NavLink to="/" className="text-white text-decoration-none">Anasayfa</NavLink>
+          <NavLink to="/about" className="text-white text-decoration-none">Hakkımızda</NavLink>
+          <NavLink to="/categories" className="text-white text-decoration-none">Kategoriler</NavLink>
+          <NavLink to="/contact" className="text-white text-decoration-none">İletişim</NavLink>
+        </nav>
+
+        {/* Profil ve Sepetim Butonları */}
+        <div className="d-flex gap-3">
+          {isAuthenticated ? (
+            <>
+              <NavLink
+                to="/profile"
+                className="btn btn-outline-light btn-sm d-flex align-items-center"
+              >
+                <FaUser className="me-2" />
+                Profil
               </NavLink>
-            </li>
-            {isAuthenticated ? (
-              <>
-                <li className='nav-item'>
-                  <NavLink to='/profile' className={'nav-link'}>
-                    <div className='nav-icon-container'>
-                      <FaUser className='navbar-icons' size={30} />
-                      <span>Profile</span>
-                    </div>
-                  </NavLink>
-                </li>
-                <li className='nav-item'>
-                  <button
-                    className='btn btn-outline-danger'
-                    onClick={handleLogout}>
-                    Logout
-                  </button>
-                </li>
-              </>
-            ) : (
-              <li className='nav-item'>
-                <NavLink to='/log-in' className={'nav-link'}>
-                  <div className='nav-icon-container'>
-                    <FaUser className='navbar-icons' size={30} />
-                    <span>Sign Up or Log In</span>
-                  </div>
-                </NavLink>
-              </li>
-            )}
-          </ul>
+              <NavLink
+                to="/cart"
+                className="btn btn-outline-light btn-sm d-flex align-items-center"
+              >
+                <FaShoppingCart className="me-2" />
+                Sepetim
+              </NavLink>
+            </>
+          ) : (
+            <NavLink
+              to="/login"
+              className="btn btn-outline-light btn-sm"
+            >
+              Giriş Yap / Kaydol
+            </NavLink>
+          )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
 
-export default React.memo(Navbar);
+export default Navbar;
+
+

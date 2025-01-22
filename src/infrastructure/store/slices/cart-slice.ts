@@ -19,9 +19,9 @@ const initialState: CartState = {
 
 // Sepet verilerini yükleyen async thunk
 export const loadCarts = createAsyncThunk<
-    Result<CartDto>, // Beklenen dönüş türü
-    { customerId: string }, // Girdi parametresi
-    { rejectValue: string } // Hata durumunda dönecek değer
+    Result<CartDto>,
+    { customerId: string },
+    { rejectValue: string }
 >(
     'carts/loadCarts',
     async ({ customerId }, { rejectWithValue }) => {
@@ -31,7 +31,7 @@ export const loadCarts = createAsyncThunk<
                 `${Endpoints.Carts.GetCartOfCustomer}?customerId=${customerId}`
             );
             console.log('loadCarts - Backend Yanıtı:', response.data);
-            return response.data; // Backend'den alınan veri
+            return response.data;
         } catch (error: any) {
             console.error('loadCarts - Hata:', error.response?.data);
             return rejectWithValue(error.response?.data || 'Sepet yüklenemedi.');
@@ -55,6 +55,21 @@ export const addProductToCart = createAsyncThunk(
         }
     }
 );
+
+// Sepetten ürün silmek için async thunk
+export const removeFromCart = createAsyncThunk(
+    'carts/removeFromCart',
+    async ({ productId, customerId }: { productId: number, customerId: string }, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(Endpoints.Carts.RemoveProduct, { productId, customerId });
+            return response.data;
+        } catch (error) {
+            console.error('Error removing product from cart:', error);
+            return rejectWithValue(error.response?.data || 'Bir hata oluştu.');
+        }
+    }
+);
+
 // Sepet slice'ı
 const cartsSlice = createSlice({
     name: 'carts',
@@ -74,6 +89,12 @@ const cartsSlice = createSlice({
             console.error('loadCarts Rejected:', action.payload);
             state.state = ApiState.Rejected;
             state.error = action.payload as string;
+        });
+        builder.addCase(removeFromCart.fulfilled, (state, action) => {
+            console.log('Ürün sepetten başarıyla kaldırıldı:', action.payload);
+        });
+        builder.addCase(removeFromCart.rejected, (state, action) => {
+            console.error('removeFromCart Rejected:', action.payload);
         });
     },
 });

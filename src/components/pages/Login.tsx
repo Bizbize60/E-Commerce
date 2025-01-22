@@ -6,6 +6,7 @@ import { setCustomerId } from '../../infrastructure/store/slices/customer-slice'
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
   const { setUser } = useUser();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(''); // Hata mesajını sıfırla
 
     try {
       const response = await fetch('http://localhost:5021/api/Users/Login', {
@@ -24,47 +26,60 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-      console.log('API Yanıtı:', data); // Yanıtı loglama
-
-      if (data.isSuccess) {
-        // LocalStorage'a kaydet
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('customerId', data.customerId);
-
-        // UserContext ve Redux için güncelleme
-        setUser({ email: formData.email, token: data.token });
-        dispatch(setCustomerId(data.customerId));
-
-        // Yönlendirme
-        navigate('/profile');
-      } else {
-        alert(data.message || 'Giriş başarısız.');
+      if (!response.ok) {
+        throw new Error('Giriş bilgileri hatalı!');
       }
-    } catch (error) {
-      console.error('Giriş sırasında hata oluştu:', error);
-      alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+
+      const data = await response.json();
+      console.log('API Yanıtı:', data);
+
+      // Kullanıcı bilgilerini güncelle
+      setUser(data.user);
+      dispatch(setCustomerId(data.user.id));
+      navigate('/'); // Başarılı giriş sonrası anasayfaya yönlendir
+    } catch (err: any) {
+      setError(err.message || 'Bir hata oluştu!');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        placeholder="Email"
-      />
-      <input
-        type="password"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-        placeholder="Password"
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="container my-5">
+      <h1 className="text-center mb-4">Giriş Yap</h1>
+      <form onSubmit={handleSubmit} className="w-50 mx-auto">
+        {error && <div className="alert alert-danger">{error}</div>} {/* Hata mesajı */}
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email Adresi</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            className="form-control"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email adresinizi girin"
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Şifre</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            className="form-control"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Şifrenizi girin"
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-danger w-100">Giriş Yap</button>
+      </form>
+      <p className="text-center mt-3">
+        Hesabınız yok mu?{' '}
+        <a href="/register" className="text-danger text-decoration-none">Kayıt Ol</a>
+      </p>
+    </div>
   );
 };
 

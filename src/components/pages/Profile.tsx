@@ -1,4 +1,3 @@
-// src/pages/Profile.tsx
 import React, { useState, useEffect } from 'react';
 import { useUser } from '../../context/UserContext';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -7,7 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Profile = () => {
-  const { user, setUser } = useUser();  // Kullanıcı verisini almak için
+  const { user, setUser } = useUser();
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     name: '',
@@ -34,22 +33,18 @@ const Profile = () => {
 
   const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
-    // API'ye veri göndermek burada yapılabilir.
-    // Güncellenmiş kullanıcı bilgilerini kaydetmek için API çağrısı yapabilirsiniz.
-
-    // Başarıyla güncellendikten sonra:
     toast.success('Profil başarıyla güncellendi');
-    setEditing(false); // Düzenleme modunu kapat
+    setEditing(false);
   };
 
   const handleLogout = () => {
-    setUser(null);  // Kullanıcıyı çıkış yapmış olarak ayarlıyoruz
-    navigate('/log-in');  // Giriş sayfasına yönlendiriyoruz
+    setUser(null); // Kullanıcıyı çıkış yaptır
     toast.info('Çıkış yapıldı');
+    navigate('/login'); // Giriş yap ekranına yönlendir
   };
 
   if (!user) {
-    return <div>Yükleniyor...</div>;  // Kullanıcı verisi yoksa, yükleniyor mesajı gösteririz.
+    return <div>Yükleniyor...</div>; // Kullanıcı verisi yoksa yükleniyor mesajı
   }
 
   return (
@@ -108,20 +103,25 @@ const Profile = () => {
 
         {editing && (
           <div className="profile-actions">
-            <button type="submit">Kaydet</button>
+            <button type="submit" className="btn btn-primary">
+              Kaydet
+            </button>
           </div>
         )}
       </form>
 
-      <div className="profile-actions">
-        <NavLink to="/orders" className="orders-link">
-          <button className="modern-order-button">
-            <FaHistory size={20} />
-            Sipariş Geçmişi
-          </button>
+      {/* Sipariş Geçmişi Linki */}
+      <div className="profile-actions mt-4">
+        <NavLink to="/orders" className="btn btn-outline-secondary">
+          <FaHistory size={20} className="me-2" />
+          Sipariş Geçmişi
         </NavLink>
-        <button onClick={handleLogout} className="logout-button">
-          <FaSignOutAlt size={20} />
+      </div>
+
+      {/* Çıkış Yap Butonu */}
+      <div className="profile-actions mt-4">
+        <button onClick={handleLogout} className="btn btn-danger">
+          <FaSignOutAlt size={20} className="me-2" />
           Çıkış Yap
         </button>
       </div>

@@ -7,9 +7,10 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: '', // Şifreyi iki kez girme
-    phoneNumber: '' // Telefon numarası
+    confirmPassword: '', // Şifre doğrulama alanı
+    phoneNumber: '', // Telefon numarası
   });
+
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +22,7 @@ const Register = () => {
 
     // Şifre doğrulama
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Şifreler uyuşmuyor!");
+      toast.error('Şifreler uyuşmuyor!');
       return;
     }
 
@@ -32,90 +33,94 @@ const Register = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-      if (data.isSuccess) {
-        toast.success('Kayıt başarılı! Giriş yapabilirsiniz.');
-        
-        // Kayıt başarılı olduğunda login sayfasına yönlendirme
-        setTimeout(() => {
-          navigate('/log-in');  // Yönlendirme yapılır
-        }, 1500);  // 1.5 saniye sonra yönlendirme yapılır
-      } else {
-        toast.error(data.message); // Hata mesajı
+      if (!response.ok) {
+        throw new Error('Kayıt sırasında bir hata oluştu!');
       }
-    } catch (error) {
-      toast.error('Bir hata oluştu, lütfen tekrar deneyin.');
+
+      const data = await response.json();
+      console.log('Kayıt başarılı:', data);
+
+      toast.success('Kayıt başarılı! Giriş yapabilirsiniz.');
+      navigate('/log-in'); // Başarılı kayıt sonrası giriş sayfasına yönlendirme
+    } catch (err: any) {
+      toast.error(err.message || 'Bir hata oluştu!');
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <h2>Kayıt Ol</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Ad</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              placeholder="Adınızı girin"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">E-posta</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="E-posta adresinizi girin"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="phoneNumber">Telefon Numarası</label>
-            <input
-              type="tel"
-              id="phoneNumber"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              required
-              placeholder="Telefon numaranızı girin"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Şifre</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Şifrenizi girin"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Şifreyi Tekrar Girin</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              placeholder="Şifrenizi tekrar girin"
-            />
-          </div>
-          <button type="submit">Kayıt Ol</button>
-        </form>
-      </div>
+    <div className="container my-5">
+      <h1 className="text-center mb-4">Kayıt Ol</h1>
+      <form onSubmit={handleSubmit} className="w-50 mx-auto">
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">Ad Soyad</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            className="form-control"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Adınızı ve soyadınızı girin"
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email Adresi</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            className="form-control"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email adresinizi girin"
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="phoneNumber" className="form-label">Telefon Numarası</label>
+          <input
+            type="text"
+            name="phoneNumber"
+            id="phoneNumber"
+            className="form-control"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            placeholder="Telefon numaranızı girin"
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Şifre</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            className="form-control"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Şifrenizi girin"
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="confirmPassword" className="form-label">Şifreyi Onayla</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            id="confirmPassword"
+            className="form-control"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Şifrenizi tekrar girin"
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-success w-100">Kayıt Ol</button>
+      </form>
+      <p className="text-center mt-3">
+        Zaten bir hesabınız var mı?{' '}
+        <a href="/log-in" className="text-danger text-decoration-none">Giriş Yap</a>
+      </p>
     </div>
   );
 };

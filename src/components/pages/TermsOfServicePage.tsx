@@ -16,7 +16,7 @@ const TermsOfServicePage = () => {
 			<Page.Main fullPage>
 				<h1 className='mb-4'>Hizmet Şartları</h1>
 				<p>
-					Bu hizmet şartları, [Şirket Adı] tarafından sunulan hizmetlerin kullanımıyla ilgili şart ve koşulları
+					Bu hizmet şartları, AraGelsin tarafından sunulan hizmetlerin kullanımıyla ilgili şart ve koşulları
 					belirler.
 				</p>
 				<h2>Kullanım Koşulları</h2>
@@ -26,17 +26,17 @@ const TermsOfServicePage = () => {
 				</p>
 				<h2>Hizmet Değişiklikleri</h2>
 				<p>
-					[Şirket Adı], hizmetlerini herhangi bir zamanda bildirimde bulunmaksızın değiştirme veya sona erdirme hakkını
+					AraGelsin, hizmetlerini herhangi bir zamanda bildirimde bulunmaksızın değiştirme veya sona erdirme hakkını
 					saklı tutar.
 				</p>
 				<h2>Sorumluluk Reddi</h2>
 				<p>
-					Hizmetlerimiz "olduğu gibi" ve "mevcut olduğu şekilde" sunulmaktadır. [Şirket Adı], hizmetlerin kesintisiz
+					Hizmetlerimiz "olduğu gibi" ve "mevcut olduğu şekilde" sunulmaktadır. AraGelsin, hizmetlerin kesintisiz
 					veya hatasız olacağını garanti etmez.
 				</p>
 				<h2>Fikri Mülkiyet</h2>
 				<p>
-					Hizmetlerimizde yer alan tüm içerik ve materyaller, [Şirket Adı]'nın mülkiyetindedir ve telif haklarıyla
+					Hizmetlerimizde yer alan tüm içerik ve materyaller, AraGelsin'in mülkiyetindedir ve telif haklarıyla
 					korunmaktadır.
 				</p>
 				<h2>Değişiklikler</h2>
