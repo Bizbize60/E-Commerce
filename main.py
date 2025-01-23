@@ -1,4 +1,6 @@
 # main.py
+import base64
+import mysql.connector
 from sanic import Sanic
 from sanic.response import json
 from sanic_ext import Extend
@@ -7,14 +9,140 @@ import jwt
 import datetime
 from functools import wraps
 import uuid
+import bcrypt
 
 app = Sanic("CategoryAPI")
 CORS(app, resources={r"/*": {"origins": "*"}})
 Extend(app)
 
 SECRET_KEY = "your_secret_key"
+def get_something_from_order(customer_id,which_data,isdict):
+    mydb = mysql.connector.connect(
+        host="localhost",      # MySQL sunucu adresi
+        user="root",           # MySQL kullanıcı adı
+        password="silatuna60", # MySQL şifresi
+        database="web"         # Veritabanı adı
+    )
+    cursor = mydb.cursor(dictionary=isdict)
 
+    # Kullanıcıyı sorgula
+    query = f"SELECT {which_data} FROM orders WHERE customer_id = %s"
+    cursor.execute(query, (customer_id,))
+    cart = cursor.fetchall()  # Tek bir sonucu al
+
+    # Bağlantıyı kapat
+    cursor.close()
+    mydb.close()
+    return cart
+
+def update_order_quantity(customer_id, product_id, quantity):
+        # MySQL veritabanına bağlan
+        mydb = mysql.connector.connect(
+            host="localhost",          # MySQL sunucu adresi
+            user="root",               # MySQL kullanıcı adı
+            password="silatuna60",     # MySQL şifresi
+            database="web"             # Veritabanı adı
+        )
+        cursor = mydb.cursor()
+
+        # Miktarı güncelleme sorgusu
+        query = """
+            UPDATE orders
+            SET quantity = quantity + %s
+            WHERE customer_id = %s AND product_id = %s
+        """
+        values = (quantity, customer_id, product_id)
+        
+        cursor.execute(query, values)
+        mydb.commit()  # Değişiklikleri kaydet
+        cursor.close()
+        mydb.close()
+
+        # Eğer etkilenen satır yoksa, kayıt bulunamadı demektir
+        
 # Mock Database
+def add_order(customer_id, product_id, quantity):
+    
+        # MySQL veritabanına bağlan
+        mydb = mysql.connector.connect(
+            host="localhost",          # MySQL sunucu adresi
+            user="root",               # MySQL kullanıcı adı
+            password="silatuna60",     # MySQL şifresi
+            database="web"             # Veritabanı adı
+        )
+        cursor = mydb.cursor()
+
+        # SQL sorgusu ile yeni sipariş ekle
+        query = """
+            INSERT INTO orders (customer_id, product_id, quantity)
+            VALUES (%s, %s, %s)
+        """
+        values = (customer_id, product_id, quantity)
+        
+        cursor.execute(query, values)
+        mydb.commit()  
+        cursor.close()
+        mydb.close()
+        print("DATABASE ORDER'A EKLENDİ")
+
+
+def get_user_from_db(email, password):
+    # Veritabanına bağlan
+    mydb = mysql.connector.connect(
+        host="localhost",      # MySQL sunucu adresi
+        user="root",           # MySQL kullanıcı adı
+        password="silatuna60", # MySQL şifresi
+        database="web"         # Veritabanı adı
+    )
+    cursor = mydb.cursor(dictionary=True)
+
+    # Kullanıcıyı sorgula
+    query = "SELECT * FROM customers WHERE email = %s"
+    cursor.execute(query, (email,))
+    user = cursor.fetchone()  # Tek bir sonucu al
+
+    # Bağlantıyı kapat
+    cursor.close()
+    mydb.close()
+
+    return user
+def register_user_into_db(arr):
+    mydb = mysql.connector.connect(
+        host="localhost", #BATUNUN İP ADRESİ
+        user="root", #BURAK SANA BİR ÜYELİK OLUŞTURAMSI LAZIM BATU BANA OLUŞTURDUĞU GİBİ
+        password="silatuna60",#BATUNUN SANA OLUŞTURDIĞI ŞİFRE
+        database="web"   #CARRENT
+        )
+    mycursor = mydb.cursor()
+    sql="INSERT INTO customers Values (%s, %s, %s)"
+    val=(arr[0]["customer_id"],arr[0]["email"],bcrypt.hashpw(arr[0]["password"].encode('utf-8'), bcrypt.gensalt()))
+    mycursor.execute(sql,val)
+    mydb.commit()
+    mycursor.close()
+    mydb.close()
+
+
+def get_products_from_db():
+    mydb = mysql.connector.connect(
+        host="localhost", #BATUNUN İP ADRESİ
+        user="root", #BURAK SANA BİR ÜYELİK OLUŞTURAMSI LAZIM BATU BANA OLUŞTURDUĞU GİBİ
+        password="silatuna60",#BATUNUN SANA OLUŞTURDIĞI ŞİFRE
+        database="web"   #CARRENT
+        )
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute("Select id, name, price, categoryId, imageUrl from products")
+    products = mycursor.fetchall()
+    for product in products:
+        if product["imageUrl"]:
+            product["imageUrl"] = base64.b64encode(product["imageUrl"]).decode('utf-8')
+
+    # Bağlantıyı kapat
+    mycursor.close()
+    mydb.close()
+    return products
+
+
+
 users_db = []
 categories = [
     {"id": 1, "name": "Meyve/Sebze"},
@@ -61,6 +189,7 @@ async def register_user(request):
     )
 
     users_db.append({"email": email, "password": password, "customer_id": customer_id})
+    register_user_into_db(users_db)
     return json({"isSuccess": True, "message": "Kayıt başarılı!", "token": token})
 
 @app.post("/api/Users/Login")
@@ -68,18 +197,20 @@ async def login_user(request):
     email = request.json.get("email")
     password = request.json.get("password")
 
-    user = next((user for user in users_db if user["email"] == email and user["password"] == password), None)
+    user = get_user_from_db(email,password)
+    if bcrypt.checkpw(password.encode('utf-8'),get_user_from_db(email,password)["password"].encode('utf-8')):
 
-    if not user:
+        token = jwt.encode(
+            {"email": email, "customerId": user["customer_id"], "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
+            SECRET_KEY,
+            algorithm="HS256"
+        )
+        
+        
+
+        return json({"isSuccess": True, "token": token, "customerId": user["customer_id"]})
+    else:
         return json({"isSuccess": False, "message": "Geçersiz e-posta veya şifre."}, status=401)
-
-    token = jwt.encode(
-        {"email": email, "customerId": user["customer_id"], "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
-        SECRET_KEY,
-        algorithm="HS256"
-    )
-
-    return json({"isSuccess": True, "token": token, "customerId": user["customer_id"]})
 
 # Kategoriler Endpointleri
 @app.get("/api/Categories")
@@ -89,13 +220,17 @@ async def get_categories(request):
 # Ürünler Endpointleri
 @app.get("/api/products")
 async def get_products(request):
-    category_id = request.args.get("categoryId")
-
+    # Veritabanından ürünleri çek
+    products = get_products_from_db()
+    
+    # Kategoriye göre filtreleme
+    category_id =  request.args.get("categoryId")
     if category_id:
         category_id = int(category_id)
         filtered_products = [p for p in products if p["categoryId"] == category_id]
         return json({"isSuccess": True, "value": filtered_products})
-
+    
+    # Tüm ürünleri döndür
     return json({"isSuccess": True, "value": products})
 
 # Sepet İşlemleri
@@ -114,29 +249,39 @@ async def add_to_cart(request):
     for item in cart_db[customer_id]:
         if item["productId"] == product_id:
             item["quantity"] += quantity
+            update_order_quantity(customer_id,product_id,item["quantity"])
             return json({"isSuccess": True, "message": "Ürün güncellendi", "cartItems": cart_db[customer_id]})
 
     cart_db[customer_id].append({"productId": product_id, "quantity": quantity})
+    add_order(customer_id,product_id,quantity)
+   
     return json({"isSuccess": True, "message": "Ürün sepete eklendi", "cartItems": cart_db[customer_id]})
 
 @app.get("/api/Carts/GetCartOfCustomer")
 async def get_cart_of_customer(request):
+    enriched_cart = []
     customer_id = request.args.get("customerId")
-
+    products = get_products_from_db()
+    cart_of_customer=get_something_from_order(customer_id,"product_id,quantity",True)
     if not customer_id:
         return json({"isSuccess": False, "message": "Müşteri ID eksik"}, status=400)
 
     if customer_id not in cart_db:
         cart_db[customer_id] = []
-
-    enriched_cart = [
-        {
-            "productId": item["productId"],
-            "quantity": item["quantity"],
-            "product": next((p for p in products if p["id"] == item["productId"]), None)
-        }
-        for item in cart_db[customer_id]
-    ]
+    for product in products:
+        for item in cart_of_customer:
+            if product["id"] == item["product_id"]:
+                enriched_cart.append({
+                        "productId": item["product_id"],
+                        "quantity": item["quantity"],
+                        "product": {
+                            "id":product["id"],
+                            "name":product["name"] ,
+                            "price":product["price"] ,
+                            "categoryId":product["categoryId"] ,
+                            "imageUrl":product["imageUrl"] ,
+                        }
+                         })
 
     return json({"isSuccess": True, "cartItems": enriched_cart})
 

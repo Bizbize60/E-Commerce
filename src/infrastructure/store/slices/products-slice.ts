@@ -38,9 +38,10 @@ const productsSlice = createSlice({
             state.state = ApiState.Pending;
         });
         builder.addCase(loadProducts.fulfilled, (state, action) => {
-            state.data = action.payload;
+            state.data = action.payload.value; // Yalnızca value kısmını al
             state.state = ApiState.Fulfilled;
         });
+        
         builder.addCase(loadProducts.rejected, (state) => {
             state.state = ApiState.Rejected;
         });

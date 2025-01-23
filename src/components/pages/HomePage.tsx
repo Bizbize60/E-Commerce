@@ -29,7 +29,8 @@ const HomePage = () => {
         axios.get('http://localhost:5021/api/products')
             .then((response) => {
                 if (response.data.isSuccess) {
-                    setProducts(response.data.value);
+                    const productsArray = Array.isArray(response.data.value) ? response.data.value : [response.data.value];
+                    setProducts(productsArray);
                 }
             })
             .catch((error) => console.error('Ürünleri alırken hata oluştu:', error));
@@ -140,7 +141,7 @@ const HomePage = () => {
                         <div key={product.id} className="col">
                             <div className="card shadow-sm h-100">
                                 <img
-                                    src={product.imageUrl}
+                                    src={`data:image/jpeg;base64,${product.imageUrl}`}
                                     className="card-img-top"
                                     alt={product.name}
                                     style={{ height: '200px', objectFit: 'cover' }}
