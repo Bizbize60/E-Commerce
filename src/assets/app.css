@@ -1,0 +1,368 @@
+/* Arka plan resmini tanımlama */
+.auth-page {
+  background-image: url('/images/market.jpeg');
+  background-size: cover;  /* Resmi tam sayfa yapar */
+  background-position: center;  /* Resmi ortalar */
+  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Formun bulunduğu alan */
+.auth-container {
+  max-width: 480px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9); /* Hafif şeffaf beyaz arka plan */
+  border-radius: 12px;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1); /* Güçlü bir gölge efekti */
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Başlık stilini modernleştirelim */
+.auth-container h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #007bff; /* Başlık altı çizgi */
+  padding-bottom: 5px;
+}
+
+/* Form alanları */
+.form-group {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+/* Input focus rengi */
+.form-group input:focus {
+  border-color: #007bff;
+  background-color: #fff;
+  outline: none;
+}
+
+/* Butonların stilleri */
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 15px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Kayıt Ol butonu stilini farklı yapalım */
+.register-btn {
+  background-color: #28a745;
+  color: white;
+  font-size: 18px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #218838;
+}
+
+/* Alt bağlantılar (Giriş Yap/Kayıt Ol) */
+p {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+p span {
+  color: #007bff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+p span:hover {
+  text-decoration: underline;
+}
+
+
+.logo {
+  width: 150px; /* Logo boyutu 250px */
+  height: 32px; /* Oranı korur */
+  object-fit: cover; /* Görüntünün taşmasını engeller */
+  cursor: pointer; /* Tıklanabilir gösterir */
+  transition: transform 0.3s ease; /* Hover animasyonu */
+  margin-top: 0px; /* Hafif yukarı veya aşağı kaydır */
+  border-radius: 15px; /* Köşeleri yuvarlatır, değeri artırarak daha yuvarlak yapabilirsiniz */
+}
+
+.logo:hover {
+  transform: scale(1.1); /* Hover'da büyütme efekti */
+}
+
+.social-media-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	background-color: #f9f9f9;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.social-media-container a {
+	margin: 0 10px;
+	transition: transform 0.3s ease;
+}
+
+.social-media-container a:hover {
+	transform: scale(1.2); /* Hover'da büyütme efekti */
+}
+
+.social-media-container img {
+	width: 30px;
+	height: 30px;
+}
+
+
+/* src/assets/profile.css */
+.profile-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-section {
+  margin-bottom: 15px;
+}
+
+.profile-section label {
+  font-weight: bold;
+  display: block;
+}
+
+.profile-section input, .profile-section textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.edit-button {
+  background-color: #007BFF;
+  color: white;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.orders-link {
+  text-decoration: none;
+}
+
+.modern-order-button {
+  display: flex;
+  align-items: center;
+  background-color: #28a745;  /* Yeşil renk */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;  /* Yuvarlak kenarlar */
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modern-order-button:hover {
+  background-color: #218838;  /* Hover efekti */
+  transform: scale(1.05);  /* Küçük büyüme efekti */
+}
+
+.modern-order-button svg {
+  margin-right: 8px;  /* İkon ile yazı arasına boşluk */
+}
+
+.logout-button {
+  background-color: #FF5733;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-bar {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.search-input {
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
+}
+
+.category-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.category-card.active {
+  border-color: #007bff;
+  background-color: #f0f8ff;
+}
+
+.category-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+.category-name {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+
+.card {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.card-img-top {
+  height: 150px;
+  object-fit: cover;
+}
+
+.contact-us-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+input, textarea {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.submit-button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
